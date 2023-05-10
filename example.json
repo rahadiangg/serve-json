@@ -1,0 +1,30 @@
+[
+    {
+        "name": "Hihang horeng",
+        "price": 1000.00
+    },
+    {
+        "name": "Tempura ura ...!!",
+        "price": 1500.00
+    },
+    {
+        "name": "Wedang ronde",
+        "price": 3000.00
+    },
+    {
+        "name": "Wedang 4 ronde",
+        "price": 5000.00
+    },
+    {
+        "name": "Tempe bachem",
+        "price": 750.00
+    },
+    {
+        "name": "Mie goreng sukses",
+        "price": 5000.00
+    },
+    {
+        "name": "Mie kuah non-sukses",
+        "price": 4500.00
+    }
+]

@@ -1,0 +1,7 @@
+configs:
+  - endpoint: /mantap/djiwa
+    defaultCode: 200
+    file: example.json
+  - endpoint: /mantap/mantap
+    defaultCode: 200
+    file: example.json
