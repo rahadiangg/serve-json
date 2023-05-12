@@ -6,8 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
 
@@ -55,6 +57,21 @@ func main() {
 	}
 
 	router := mux.NewRouter()
+	logger := logrus.New()
+
+	loggingMiddleware := func(h http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			start := time.Now()
+
+			logger.WithField("nil", logrus.Fields{
+				"method":   r.Method,
+				"URI":      r.RequestURI,
+				"duration": time.Since(start),
+			}).Info("Recived request")
+
+			h.ServeHTTP(w, r)
+		})
+	}
 
 	// fmt.Printf("%+v\n", c)
 	for _, x := range c.Configs {
@@ -90,7 +107,12 @@ func main() {
 		router.HandleFunc(x.Endpoint, handleFunc).Methods("GET")
 	}
 
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), router))
+	wrapperMiddleware := loggingMiddleware(router)
+	address := ":" + os.Getenv("PORT")
+	logger.WithField("addr", address).Info("Starting server")
+	if err := http.ListenAndServe(address, wrapperMiddleware); err != nil {
+		logger.WithField("event", "start server").Fatal(err)
+	}
 }
 
 func GenError(w http.ResponseWriter, code int, message string) {
